@@ -41,6 +41,11 @@
   notify:
     - restart dhcpd
 
+- name: Generate dhcpd6.conf
+  template: src=dhcpd6.conf.j2 dest={{ dhcp6_server_config }}
+  notify:
+    - restart dhcpd6
+
 # Generate service configuration
 - name: Generate DHCP service conf
   template: src=service.conf.{{ ansible_os_family }}.j2 dest={{ dhcp_service_config }} owner=root group=root
@@ -51,3 +56,7 @@
 # Enable DHCP server
 - name: Start the dhcp services DHCP
   service: name={{ dhcp_service }} state=started enabled=yes
+
+# Enable DHCP6 server
+- name: Start the dhcp6 services DHCP
+  service: name={{ dhcp6_service }} state=started enabled=yes
