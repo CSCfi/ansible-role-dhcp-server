@@ -2,5 +2,7 @@
 dhcp_server_package: dhcp
 dhcp_server_config: /etc/dhcp/dhcpd.conf
 dhcp_service: dhcpd
+dhcp6_server_config: /etc/dhcp/dhcpd6.conf
+dhcp6_service: dhcpd6
 dhcp_service_config: /etc/sysconfig/dhcpd
 apparmor_service: apparmor
