@@ -42,7 +42,7 @@
     - restart dhcpd
 
 - name: Generate dhcpd6.conf
-  template: src=dhcpd6.conf.j2 dest={{ dhcp6_server_config }}
+  template: src=dhcpd6.conf.j2 dest={{ dhcp6_server_config }} owner=root group=root mode=0644 validate='/usr/sbin/dhcpd -t -6 -cf %s'
   notify:
     - restart dhcpd6
 
