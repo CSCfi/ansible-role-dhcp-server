@@ -7,11 +7,7 @@ omapi-port {{ dhcp_omapi_port }};
 {% endif %}
 # option definitions common to all supported networks...
 {% if dhcp_common_domain is defined %}
-
 option domain-name "{{ dhcp_common_domain }}";
-{% endif %}
-{% if dhcp_common_nameservers is defined %}
-option domain-name-servers {{ dhcp_common_nameservers }};
 {% endif %}
 {% if dhcp_common_default_lease_time is defined %}
 default-lease-time {{ dhcp_common_default_lease_time }};
@@ -21,11 +17,7 @@ max-lease-time {{ dhcp_common_max_lease_time }};
 {% endif %}
 
 # Dynamic DNS
-ddns-updates {{ dhcp_ddns_updates | ternary("on", "off") }};
-ddns-update-style {{ dhcp_ddns_update_style }};
-{{ dhcp_ddns_client_updates | ternary("allow", "ignore") }} client-updates;
 {{ dhcp_ddns_unknown_clients | ternary("allow", "ignore") }} unknown-clients;
-update-static-leases {{ dhcp_ddns_update_static_leases | ternary("on", "off") }};
 
 {% if dhcp_ddns_keys is defined %}
 {% for key in dhcp_ddns_keys %}
@@ -71,7 +63,7 @@ option {{ o }};
 {% if dhcp_common_parameters is defined %}
 
 #DHCP parameters
-{% for p in dhcp_common_parameters %}
+{% for p in dhcp6_common_parameters %}
 {{ p }};
 {% endfor %}
 {% endif %}
@@ -126,12 +118,12 @@ host {{ h.name }} {
 {% endfor %}
 {% endif %}
 
-{% if dhcp_subnets is defined %}
+{% if dhcp6_subnets is defined %}
 # Subnets
-{% for s in dhcp_subnets %}
-subnet {{ s.base }} netmask {{ s.netmask }} {
+{% for s in dhcp6_subnets %}
+subnet6 {{ s.base }} {
 {% if s.interface is defined %}
-  interface "{{ s.interface }}";
+  interface {{ s.interface }};
 {% endif %}
 {% if s.range_start is defined %}
   range {{ s.range_start }} {{ s.range_end }};
@@ -143,10 +135,10 @@ subnet {{ s.base }} netmask {{ s.netmask }} {
   option broadcast-address {{ s.broadcast_address }};
 {% endif %}
 {% if s.domain_nameservers is defined %}
-  option domain-name-servers {{ s.domain_nameservers }};
+  option dhcp6.name-servers {{ s.domain_nameservers }};
 {% endif %}
 {% if s.domain_name is defined %}
-  option domain-name "{{ s.domain_name }}";
+  option dhcp.domain-search "{{ s.domain_name }}";
 {% endif %}
 {% if s.ntp_servers is defined %}
   option ntp-servers {{ s.ntp_servers }};
