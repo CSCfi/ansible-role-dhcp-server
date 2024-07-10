@@ -1,5 +1,5 @@
 ---
-dhcp_server_package: dhcp
+dhcp_server_package: "{{ 'dhcp-server' if ansible_distribution_major_version > '7' else 'dhcp' }}"
 dhcp_server_config: /etc/dhcp/dhcpd.conf
 dhcp_service: dhcpd
 dhcp6_server_config: /etc/dhcp/dhcpd6.conf
